@@ -1,0 +1,25 @@
+{
+    "include": [
+    {
+        "name": "4.20.11"
+    },
+    {
+        "name": "4.20.8"
+    },
+    {
+        "java-tags": "0.0.0"
+    },
+    {
+        "license-manager": "0.1.14"
+    },
+    {
+        "license-manager": "0.1.13"
+    },
+    {
+        "kyverno-operator": "0.3.12"
+    },
+    {
+        "kyverno-operator": "0.3.11"
+    }
+    ]
+}
