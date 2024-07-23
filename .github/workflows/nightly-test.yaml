@@ -27,7 +27,7 @@ jobs:
       - name: Get config file and set matrix variable
         id: set-matrix
         run: |
-          curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
+          curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
           cat ./config.json
           matrix=$(jq -c . < ./config.json)
           echo "matrix=$matrix" >> $GITHUB_ENV
