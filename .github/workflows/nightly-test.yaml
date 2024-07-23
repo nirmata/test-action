@@ -34,6 +34,7 @@ jobs:
           # echo "matrix=$matrix" >> $GITHUB_OUTPUT
           # echo "matrix=$GITHUB_OUTPUT"
           curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
+          cat ./config.json
           echo "matrix=$(jq -c . < ./config.json)" >> $GITHUB_OUTPUT
   tag-scan-nightly:
     # if: ${{ github.event_name == 'schedule' }}
