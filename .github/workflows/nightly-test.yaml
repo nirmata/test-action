@@ -35,7 +35,7 @@ jobs:
           # echo "matrix=$GITHUB_OUTPUT"
           curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
           cat ./config.json
-          echo "matrix=$(jq -c . < ./config.json)" >> $GITHUB_OUTPUT
+          echo "MATRIX=$(jq -c . < ./config.json)" >> $GITHUB_ENV
   tag-scan-nightly:
     # if: ${{ github.event_name == 'schedule' }}
     name: Scan
@@ -48,9 +48,9 @@ jobs:
       - name: Print Matrix
         run: |
           # Print the matrix value from the previous job
-          echo "The matrix value from the previous job is: ${{ needs.configure.outputs.matrix }}"
+          echo "The matrix value from the previous job is: ${{ env.MATRIX }}"
       - name: Debug Output
-        run: echo "${{ needs.configure.outputs.matrix }}"
+        run: echo "${{ env.MATRIX }}"
 
       - name: Set Image name
         run: |
