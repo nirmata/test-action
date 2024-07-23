@@ -32,6 +32,7 @@ jobs:
           matrix=$(echo "$json" | jq -c .)
           echo "matrix=$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          echo "matrix=$GITHUB_OUTPUT"
   tag-scan-nightly:
     # if: ${{ github.event_name == 'schedule' }}
     name: Scan
