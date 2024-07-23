@@ -26,7 +26,7 @@ jobs:
           cat ./config.json
 
       - name: Set matrix variable
-        id: get-matrix
+        id: set-matrix
         run: |
           # curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
           # cat ./config.json
