@@ -22,8 +22,6 @@ jobs:
       id-token: write
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      run: |
-        echo ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
@@ -32,6 +30,7 @@ jobs:
         run: |
           json=$(curl -H "Authorization: token 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" -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json)
           matrix=$(echo "$json" | jq -c .)
+          echo "matrix=$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
   tag-scan-nightly:
     # if: ${{ github.event_name == 'schedule' }}
