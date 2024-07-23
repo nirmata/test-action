@@ -37,10 +37,15 @@ jobs:
     # if: ${{ github.event_name == 'schedule' }}
     name: Scan
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
+    # strategy:
+    #   fail-fast: false
+    #   matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
     steps: 
+
+      - name: Print Matrix
+        run: |
+          # Print the matrix value from the previous job
+          echo "The matrix value from the previous job is: ${{ needs.configure.outputs.matrix }}"
       - name: Debug Output
         run: echo "${{ needs.configure.outputs.matrix }}"
 
