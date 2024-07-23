@@ -27,7 +27,7 @@ jobs:
           cat ./config.json
           # matrix=$(jq -c . < ./config.json)
           # echo "matrix=$matrix" >> $GITHUB_ENV
-          echo "::set-output name=matrix::$(jq -c . < ./config.json)"
+          echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
   tag-scan-nightly:
     needs: configure
