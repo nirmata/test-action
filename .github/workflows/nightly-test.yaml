@@ -1,0 +1,65 @@
+name: build-push-sign
+
+env:
+  REGISTRY: ghcr.io
+
+on:
+  # schedule: ## every 2 minutes
+  #   - cron: '*/2 * * * *'
+  workflow_dispatch:
+    inputs:
+
+concurrency:
+  group: ci-build-${{ github.ref }}-1
+  cancel-in-progress: true
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      run: |
+        echo ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout to repository
+        uses: actions/checkout@v3
+      - name: Get config file and set matrix variable
+        id: set-matrix
+        run: |
+          json=$(curl -H "Authorization: token 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" -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json)
+          matrix=$(echo "$json" | jq -c .)
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+  tag-scan-nightly:
+    # if: ${{ github.event_name == 'schedule' }}
+    name: Scan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
+    steps: 
+      - name: Debug Output
+        run: echo "${{ needs.configure.outputs.matrix }}"
+
+      - name: Set Image name
+        run: |
+          echo IMAGE_NAME="${{env.REGISTRY}}/nirmata/policies:${{ matrix.java-tags }}" >> $GITHUB_ENV
+
+      - name: Log into registry ${{env.REGISTRY}}
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
+        with:
+          registry: ${{env.REGISTRY}}
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: image scanning
+        id: scan
+        uses: nirmata/reusable-workflows/.github/actions/image-scanning@main
+        with:
+          pcc_url: ${{ secrets.PCC_URL }}
+          pcc_user: ${{ secrets.PCC_USER }}
+          pcc_pass: ${{ secrets.PCC_PASS }}
+          image_name: ${{env.IMAGE_NAME}} 
