@@ -22,7 +22,7 @@ jobs:
         
       - name: Get config file 
         run: |
-          curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/file-inclusion/tags/config.json
+          curl -H "Authorization: token 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" -o ./config.json -s https://raw.githubusercontent.com/nirmata/reusable-workflows/NDEV-19853/tags/kubectl_config.json
           cat ./config.json
 
       - name: Set matrix variable
@@ -44,22 +44,14 @@ jobs:
       - name: Debug Output
         run: echo "${{ needs.configure.outputs.matrix }}"
 
-      - name: Set Image name
-        run: |
-          echo IMAGE_NAME="${{env.REGISTRY}}/nirmata/policies:${{ matrix.java-tags }}" >> $GITHUB_ENV
-
-      - name: Log into registry ${{env.REGISTRY}}
-        uses: docker/login-action@v3
-        with:
-          registry: ${{env.REGISTRY}}
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Image scanning
         id: scan
-        uses: nirmata/reusable-workflows/.github/actions/image-scanning@main
+        uses: nirmata/reusable-workflows/.github/actions/nightly-scanning@NDEV-19853
         with:
+          tag: ${{ matrix.kubectl-tags }}
+          repo: ${{ github.repository }}
+          github_password: ${{ secrets.GITHUB_TOKEN }}
           pcc_url: ${{ secrets.PCC_URL }}
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
-          image_name: ${{ env.IMAGE_NAME }} 
