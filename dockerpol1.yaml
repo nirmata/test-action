@@ -10,7 +10,7 @@ metadata:
       This policy checks whether Dockerfiles exposes port 22.
 spec:
   rules:
-    - name: prefer-copy-over-add
+    - name: prefer-copy-over-add-1
       match:
         any:
         - (Stages[].Commands[?Name=='EXPOSE'][] | length(@) > `0`): true
